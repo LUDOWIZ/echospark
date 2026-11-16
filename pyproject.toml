@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "echospark"
+version = "0.1.0"
+description = "Lättviktig, ramverksfri ReAct AI-agent driven av Gemini."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "openai>=1.50.0",
+    "rich>=13.9.0",
+    "python-dotenv>=1.0.1",
+]
+
+[project.scripts]
+echospark = "echospark.main:main"
