@@ -12,7 +12,7 @@ def main():
     console.print(
         Panel.fit(
             "[bold cyan]✦ EchoSpark v0.1.0[/bold cyan]\n"
-            "[dim]AI-kollega driven av Gemini. Skriv 'exit' för att avsluta.[/dim]",
+            "[dim]Autonomous software engineering agent powered by Gemini. Type 'exit' to terminate.[/dim]",
             border_style="cyan",
         )
     )
@@ -21,13 +21,13 @@ def main():
 
     while True:
         try:
-            user_input = console.input("\n[bold green]Du > [/bold green]").strip()
+            user_input = console.input("\n[bold green]Operator > [/bold green]").strip()
             if not user_input:
                 continue
             if user_input.lower() in ("exit", "quit", "q"):
                 break
 
-            with console.status("[bold cyan]Jobbar...[/bold cyan]"):
+            with console.status("[bold cyan]Executing...[/bold cyan]"):
                 reply = agent.run(user_input)
 
             console.print("\n[bold cyan]EchoSpark > [/bold cyan]")
