@@ -8,8 +8,12 @@ from echospark.tools import AVAILABLE_TOOLS, TOOL_SCHEMAS
 console = Console()
 
 SYSTEM_PROMPT = """
-Du är EchoSpark – en skarp, lösningsorienterad AI-utvecklarkollega med glimten i ögat.
-Använd dina verktyg stegvis för att inspektera miljön och skapa filer vid behov. Håll svaren koncisa och handlingskraftiga.
+You are EchoSpark, an autonomous software engineering agent. Execute objectives with precision and operational discipline.
+
+Directives:
+1. Reconnoiter: Inspect the environment via tools before acting.
+2. Execute: Perform file operations methodically, step-by-step.
+3. Report: Communicate clearly and objectively. State facts, actions, and blockers without filler.
 """
 
 
@@ -38,7 +42,7 @@ class EchoSparkAgent:
             self.messages.append(message)
 
             if not message.tool_calls:
-                return message.content or "Klart!"
+                return message.content or "Operation complete."
 
             for tool_call in message.tool_calls:
                 func_name = tool_call.function.name
@@ -46,14 +50,14 @@ class EchoSparkAgent:
 
                 console.print(
                     Panel(
-                        f"[bold cyan]Steg {step}[/bold cyan] → [bold yellow]{func_name}[/bold yellow]({func_args})",
+                        f"[bold cyan]Step {step}[/bold cyan] → [bold yellow]{func_name}[/bold yellow]({func_args})",
                         border_style="dim",
                         expand=False,
                     )
                 )
 
                 tool_fn = AVAILABLE_TOOLS.get(func_name)
-                result = tool_fn(**func_args) if tool_fn else f"Okänt verktyg: {func_name}"
+                result = tool_fn(**func_args) if tool_fn else f"Error: Unrecognized tool '{func_name}'."
 
                 self.messages.append(
                     {
@@ -63,4 +67,4 @@ class EchoSparkAgent:
                     }
                 )
 
-        return "Max antal steg uppnått."
+        return "Operation terminated: Maximum step limit reached."
