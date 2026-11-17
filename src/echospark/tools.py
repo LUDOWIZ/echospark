@@ -5,31 +5,31 @@ from datetime import datetime
 
 
 def get_system_status() -> str:
-    """Hämtar aktuell systemstatus, ledigt diskutrymme och tid."""
+    """Retrieves current system status, available disk space, and local time."""
     total, used, free = shutil.disk_usage("/")
     free_gb = free // (2**30)
     now = datetime.now().strftime("%H:%M")
-    return f"OS: {platform.system()} {platform.release()} | Ledigt: {free_gb} GB | Tid: {now}"
+    return f"OS: {platform.system()} {platform.release()} | Free disk: {free_gb} GB | Time: {now}"
 
 
 def list_workspace_files(directory: str = ".") -> str:
-    """Listar filer i en mapp."""
+    """Lists files in a specified directory."""
     try:
         items = [
             f for f in os.listdir(directory)
             if not f.startswith(".") and f not in ("__pycache__", "venv", ".venv")
         ]
-        return f"Filer i '{directory}': {', '.join(items) if items else 'Tomt!'}"
+        return f"Files in '{directory}': {', '.join(items) if items else 'Empty'}"
     except Exception as e:
-        return f"Fel: {e}"
+        return f"Error: {e}"
 
 
 def write_project_file(filename: str, content: str) -> str:
-    """Skapar eller skriver över en fil i arbetsytan."""
+    """Creates or overwrites a file in the workspace."""
     safe_path = os.path.basename(filename)
     with open(safe_path, "w", encoding="utf-8") as f:
         f.write(content)
-    return f"Skapade '{safe_path}'."
+    return f"File written: '{safe_path}'."
 
 
 AVAILABLE_TOOLS = {
@@ -43,7 +43,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "get_system_status",
-            "description": "Kollar OS, ledigt diskutrymme och tid.",
+            "description": "Retrieve OS version, available disk space, and current time.",
             "parameters": {"type": "object", "properties": {}},
         },
     },
@@ -51,11 +51,11 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "list_workspace_files",
-            "description": "Listar filer i projektmappen.",
+            "description": "List files within a target project directory.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "directory": {"type": "string", "description": "Sökväg, t.ex. '.'"}
+                    "directory": {"type": "string", "description": "Target directory path, e.g., '.'"}
                 },
             },
         },
@@ -64,12 +64,12 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "write_project_file",
-            "description": "Skapar en fil med angivet innehåll.",
+            "description": "Create or overwrite a project file with specified content.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "filename": {"type": "string", "description": "Filnamn, t.ex. 'NOTES.md'"},
-                    "content": {"type": "string", "description": "Innehåll att skriva"},
+                    "filename": {"type": "string", "description": "Target filename, e.g., 'NOTES.md'"},
+                    "content": {"type": "string", "description": "Content to write to the file"},
                 },
                 "required": ["filename", "content"],
             },
